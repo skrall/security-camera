@@ -52,7 +52,7 @@ public class App {
                 imageCompare.compare();
                 logger.info("Detected a difference: {}", !imageCompare.match());
                 if(!imageCompare.match()) {
-                    imageCompare.writeImg2ToFile(String.format("%05d.jpg", numberOfDifferences++));
+                    imageCompare.writeImg2ToFile(String.format("%05d.png", numberOfDifferences++));
                 }
             }
             oldImage = newImage;

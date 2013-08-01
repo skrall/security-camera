@@ -5,13 +5,11 @@ import javafx.scene.image.PixelFormat;
 import javafx.scene.image.PixelReader;
 import javafx.scene.image.WritablePixelFormat;
 import org.krall.security.commandline.AppOptions;
+import org.krall.security.util.SwingFXUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import sun.awt.image.IntegerComponentRaster;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileInputStream;
 import java.nio.IntBuffer;
@@ -84,45 +82,11 @@ public class FXImageCompare {
     public void writeImg2ToFile(String filename) {
         try {
             File outputFile = new File(AppOptions.getInstance().getImageDirectory(), filename);
-            ImageIO.write(fromFXImage(img2, null), "jpg", outputFile);
+            ImageIO.write(SwingFXUtils.fromFXImage(img2, null), "png", outputFile);
         } catch (Exception e) {
             logger.error("Error while writing file.", e);
             throw new RuntimeException("Error while writing file.", e);
         }
-    }
-
-    private BufferedImage fromFXImage(Image img, BufferedImage bimg) {
-        PixelReader pr = img.getPixelReader();
-        if (pr == null) {
-            return null;
-        }
-        int iw = (int) img.getWidth();
-        int ih = (int) img.getHeight();
-        if (bimg != null) {
-            int type = bimg.getType();
-            int bw = bimg.getWidth();
-            int bh = bimg.getHeight();
-            if (bw < iw || bh < ih ||
-                (type != BufferedImage.TYPE_INT_ARGB && type != BufferedImage.TYPE_INT_ARGB_PRE)) {
-                bimg = null;
-            } else if (iw < bw || ih < bh) {
-                Graphics2D g2d = bimg.createGraphics();
-                g2d.setComposite(AlphaComposite.Clear);
-                g2d.fillRect(0, 0, bw, bh);
-                g2d.dispose();
-            }
-        }
-        if (bimg == null) {
-            bimg = new BufferedImage(iw, ih, BufferedImage.TYPE_INT_ARGB);
-        }
-        IntegerComponentRaster icr = (IntegerComponentRaster) bimg.getRaster();
-        int offset = icr.getDataOffset(0);
-        int scan = icr.getScanlineStride();
-        int data[] = icr.getDataStorage();
-        WritablePixelFormat<IntBuffer> pf = (bimg.isAlphaPremultiplied() ? PixelFormat.getIntArgbPreInstance() :
-                                             PixelFormat.getIntArgbInstance());
-        pr.getPixels(0, 0, iw, ih, pf, data, offset, scan);
-        return bimg;
     }
 
     // returns true if image pair is considered a match
@@ -170,7 +134,7 @@ public class FXImageCompare {
     }
 
     private int getAverageBrightness(int[] pixels) {
-        int alpha = 0, red = 0, green = 0, blue = 0;
+        int alpha = 0, red, green, blue;
         int total = 0;
         for (int color : pixels) {
             logger.trace("Color: {}", color);
@@ -187,7 +151,7 @@ public class FXImageCompare {
     }
 
     private int getAveragePixelValues(int[] pixels) {
-        int alpha = 0, red = 0, green = 0, blue = 0;
+        int alpha = 0, red, green, blue;
         int total = 0;
         for (int color : pixels) {
             logger.trace("Color: %d", color);
