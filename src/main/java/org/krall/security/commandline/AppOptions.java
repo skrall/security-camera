@@ -36,6 +36,14 @@ public class AppOptions {
     @Option(name = "--useAwt", aliases = {"-a"}, usage = "Use AWT instead of JavaFX to process image")
     boolean useAwt = false;
 
+    @Option(name = "--useTimeLapse", aliases = {"-t"}, usage = "Use time lapse feature of raspistill")
+    boolean useTimeLapse = false;
+
+    @Option(name = "--millisBetweenCapture", aliases = {"-m"}, usage = "Milliseconds between captures when in time " +
+                                                                       "lapse mode.")
+    int millisBetweenCapture = 1000;
+
+
     static {
         appOptions = new AppOptions();
     }
@@ -81,5 +89,13 @@ public class AppOptions {
 
     public boolean isUseAwt() {
         return useAwt;
+    }
+
+    public boolean isUseTimeLapse() {
+        return useTimeLapse;
+    }
+
+    public int getMillisBetweenCapture() {
+        return millisBetweenCapture;
     }
 }

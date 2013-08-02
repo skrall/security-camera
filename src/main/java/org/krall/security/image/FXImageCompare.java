@@ -70,8 +70,16 @@ public class FXImageCompare {
         this.img1 = img1;
     }
 
+    public Image getImg1() {
+        return img1;
+    }
+
     public void setImg2(Image img2) {
         this.img2 = img2;
+    }
+
+    public Image getImg2() {
+        return img2;
     }
 
     // return the image that indicates the regions where changes where detected.
@@ -95,6 +103,7 @@ public class FXImageCompare {
     }
 
     public void compare() {
+        StringBuilder sb = new StringBuilder();
         logger.info("Starting compare...");
         width = (int) img1.getWidth();
         heigth = (int) img1.getHeight();
@@ -106,7 +115,7 @@ public class FXImageCompare {
         this.match = true;
         int[] buf = new int[blocksx * blocksy];
         for (int y = 0; y < comparey; y++) {
-            if (debugMode > 0) System.out.print("|");
+            if (debugMode > 0) sb.append("|");
             for (int x = 0; x < comparex; x++) {
 
                 logger.trace("X: {} BlocksX: {} Y: {} BlocksY: {}", x, blocksx, y, blocksy);
@@ -124,12 +133,13 @@ public class FXImageCompare {
                     this.match = false;
                     //return;
                 }
-                if (debugMode == 1) System.out.print((diff > factorA ? "X" : " "));
-                if (debugMode == 2) System.out.print(diff + (x < comparex - 1 ? "," : ""));
+                if (debugMode == 1) sb.append((diff > factorA ? "X" : " "));
+                if (debugMode == 2) sb.append(diff + (x < comparex - 1 ? "," : ""));
 
             }
-            if (debugMode > 0) System.out.println("|");
+            if (debugMode > 0) sb.append("|\n");
         }
+        logger.info("Image:\n{}", sb);
         logger.info("Finished compare.");
     }
 
