@@ -50,7 +50,7 @@ public class INotifyWait implements Runnable {
 
         @Override
         protected void processLine(String line, int level) {
-            logger.info("Got line({}): {}", level, line);
+            processLine(line);
         }
     }
 }
