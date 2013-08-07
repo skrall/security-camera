@@ -23,7 +23,7 @@ public class CaptureTimeLapseImage implements Runnable{
         AppOptions options = AppOptions.getInstance();
         command = CommandLine.parse(String.format("raspistill -o %s/%%08d.jpg -t 3600000 -tl %s -n " +
                                                   "-w %s -h %s ",
-                                                  options.getImageDirectory().getAbsolutePath(),
+                                                  options.getInputDirectory().getAbsolutePath(),
                                                   options.getMillisBetweenCapture(),
                                                   options.getImageWidth(),
                                                   options.getImageHeight()));

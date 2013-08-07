@@ -29,9 +29,9 @@ public class SimpleCaptureAndCompareImages implements CaptureAndCompareImages {
             if(oldImage != null) {
                 imageCompare.compare();
                 logger.info("Detected a difference: {}", !imageCompare.match());
-                if(!imageCompare.match()) {
-                    imageCompare.writeImg2ToFile(String.format("%05d.png", numberOfDifferences++));
-                }
+                //if(!imageCompare.match()) {
+                //    imageCompare.writeImg2ToFile(String.format("%05d.png", numberOfDifferences++));
+                //}
             }
             oldImage = newImage;
             imageCompare.setImg1(oldImage);

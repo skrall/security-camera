@@ -22,12 +22,11 @@ public class WatcherCaptureAndCompareImages implements CaptureAndCompareImages {
 
     private FXImageCompare imageCompare = new FXImageCompare();
 
-    private AppOptions options = AppOptions.getInstance();
-
     private ThreadPoolExecutor executor = new ThreadPoolExecutor(1, 1, 0, TimeUnit.SECONDS,
                                                                  new ArrayBlockingQueue<Runnable>(1));
 
     public WatcherCaptureAndCompareImages() {
+        AppOptions options = AppOptions.getInstance();
         imageCompare
                 .setParameters(options.getVerticalRegions(), options.getHorizontalRegions(), options.getSensitivity(),
                                options.getStabilizer());
@@ -42,7 +41,6 @@ public class WatcherCaptureAndCompareImages implements CaptureAndCompareImages {
         captureTimeLapseImage.run();
         INotifyWait iNotifyWait = new INotifyWait(this);
         iNotifyWait.run();
-        //watchDirectory();
         logger.info("Finished running capture.");
     }
 
@@ -92,36 +90,6 @@ public class WatcherCaptureAndCompareImages implements CaptureAndCompareImages {
                 logger.error("Error while processing image.", e);
             }
             return null;
-        }
-
-        @Override
-        protected void scheduled() {
-            super.scheduled();    //To change body of overridden methods use File | Settings | File Templates.
-            logger.info("Scheduled...");
-        }
-
-        @Override
-        protected void running() {
-            super.running();    //To change body of overridden methods use File | Settings | File Templates.
-            logger.info("Running...");
-        }
-
-        @Override
-        protected void succeeded() {
-            super.succeeded();    //To change body of overridden methods use File | Settings | File Templates.
-            logger.info("Succeeded...");
-        }
-
-        @Override
-        protected void cancelled() {
-            super.cancelled();    //To change body of overridden methods use File | Settings | File Templates.
-            logger.info("Cancelled...");
-        }
-
-        @Override
-        protected void failed() {
-            super.failed();    //To change body of overridden methods use File | Settings | File Templates.
-            logger.info("Failed...");
         }
     }
 }

@@ -1,5 +1,6 @@
 package org.krall.security;
 
+import com.google.common.eventbus.EventBus;
 import javafx.application.Application;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
@@ -9,6 +10,8 @@ import org.krall.security.commandline.AppOptions;
 import org.krall.security.compare.CaptureAndCompareImages;
 import org.krall.security.compare.SimpleCaptureAndCompareImages;
 import org.krall.security.compare.WatcherCaptureAndCompareImages;
+import org.krall.security.event.EventBusSingleton;
+import org.krall.security.event.ImageChangeDifferenceListener;
 import org.krall.security.image.FXImageCompare;
 import org.krall.security.image.ImageCompare;
 import org.slf4j.Logger;
@@ -29,6 +32,9 @@ public class App extends Application {
         } else {
             captureAndCompareImages = new SimpleCaptureAndCompareImages();
         }
+
+        EventBus eventBus = EventBusSingleton.getInstance().getEventBus();
+        eventBus.register(new ImageChangeDifferenceListener());
 
         captureAndCompareImages.captureAndCompareImages();
     }

@@ -15,8 +15,11 @@ public class AppOptions {
     @Option(name = "--height", aliases = {"-h"}, depends = "--width", usage = "Height of the image captured")
     int imageHeight = 600;
 
-    @Option(name = "--directory", aliases = {"-d"}, usage = "Directory to save images")
-    File imageDirectory = new File("/home/pi/images");
+    @Option(name = "--inputDirectory", aliases = {"-i"}, usage = "Directory to read for image input.")
+    File inputDirectory = new File("/home/pi/images/input");
+
+    @Option(name = "--outputDirectory", aliases = {"-o"}, usage = "Directory to read for image input.")
+    File outputDirectory = new File("/home/pi/images/output");
 
     @Option(name = "--verticalRegions", aliases = {"-vr"}, usage = "Number of vertical Regions")
     int verticalRegions = 8;
@@ -33,11 +36,11 @@ public class AppOptions {
     @Option(name = "--loglevel", aliases = {"-l"}, usage = "Log level", handler = LogLevelHandler.class)
     Level logLevel = Level.INFO;
 
-    @Option(name = "--useAwt", aliases = {"-a"}, usage = "Use AWT instead of JavaFX to process image")
-    boolean useAwt = false;
-
     @Option(name = "--useTimeLapse", aliases = {"-t"}, usage = "Use time lapse feature of raspistill")
     boolean useTimeLapse = false;
+
+    @Option(name = "--noWriteDifferences", aliases = {"-n"}, usage = "Don't write differences to disk")
+    boolean noWriteDifferences = true;
 
     @Option(name = "--millisBetweenCapture", aliases = {"-m"}, usage = "Milliseconds between captures when in time " +
                                                                        "lapse mode.")
@@ -63,8 +66,12 @@ public class AppOptions {
         return imageHeight;
     }
 
-    public File getImageDirectory() {
-        return imageDirectory;
+    public File getInputDirectory() {
+        return inputDirectory;
+    }
+
+    public File getOutputDirectory() {
+        return outputDirectory;
     }
 
     public int getVerticalRegions() {
@@ -87,12 +94,12 @@ public class AppOptions {
         return logLevel;
     }
 
-    public boolean isUseAwt() {
-        return useAwt;
-    }
-
     public boolean isUseTimeLapse() {
         return useTimeLapse;
+    }
+
+    public boolean isNoWriteDifferences() {
+        return noWriteDifferences;
     }
 
     public int getMillisBetweenCapture() {

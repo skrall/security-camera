@@ -26,7 +26,7 @@ public class INotifyWait implements Runnable {
         executor.setStreamHandler(new PumpStreamHandler(new CustomLogOutputStream()));
         AppOptions options = AppOptions.getInstance();
         command = CommandLine.parse(String.format("inotifywait -m -e close_write --format %%w%%f -q %s ",
-                                                  options.getImageDirectory().getAbsolutePath()));
+                                                  options.getInputDirectory().getAbsolutePath()));
     }
 
     @Override

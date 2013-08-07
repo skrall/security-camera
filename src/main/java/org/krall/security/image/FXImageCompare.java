@@ -1,10 +1,17 @@
 package org.krall.security.image;
 
+import com.google.common.eventbus.EventBus;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelFormat;
 import javafx.scene.image.PixelReader;
+import javafx.scene.image.WritableImage;
 import javafx.scene.image.WritablePixelFormat;
+import javafx.scene.paint.Color;
 import org.krall.security.commandline.AppOptions;
+import org.krall.security.event.EventBusSingleton;
+import org.krall.security.event.ImageChangeEvent;
 import org.krall.security.util.SwingFXUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +20,8 @@ import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.FileInputStream;
 import java.nio.IntBuffer;
+import java.util.ArrayList;
+import java.util.List;
 
 public class FXImageCompare {
 
@@ -39,6 +48,8 @@ public class FXImageCompare {
     private int width;
 
     private int heigth;
+
+    private List<PixelLocation> pixelLocations = new ArrayList<>();
 
     public FXImageCompare() {
     }
@@ -84,12 +95,35 @@ public class FXImageCompare {
 
     // return the image that indicates the regions where changes where detected.
     public Image getChangeIndicator() {
-        return imgc;
+        try {
+            Canvas canvas = new Canvas(imgc.getWidth(), imgc.getHeight());
+
+            GraphicsContext gc = canvas.getGraphicsContext2D();
+            gc.drawImage(imgc, 0, 0);
+
+            int width = (int) imgc.getWidth();
+            int heigth = (int) imgc.getHeight();
+            int blocksx = width / comparex;
+            int blocksy = heigth / comparey;
+
+            int x = 7;
+            int y = 5;
+            gc.setStroke(Color.RED);
+            gc.strokeRect(x * blocksx, y * blocksy, blocksx, blocksy);
+
+            WritableImage wim = new WritableImage(width, heigth);
+            canvas.snapshot(null, wim);
+
+            return imgc;
+        } catch (Exception e) {
+            logger.error("Error while creating change indicator image.", e);
+            throw new RuntimeException("Error while creating change indicator image.", e);
+        }
     }
 
     public void writeImg2ToFile(String filename) {
         try {
-            File outputFile = new File(AppOptions.getInstance().getImageDirectory(), filename);
+            File outputFile = new File(AppOptions.getInstance().getOutputDirectory(), filename);
             ImageIO.write(SwingFXUtils.fromFXImage(img2, null), "png", outputFile);
         } catch (Exception e) {
             logger.error("Error while writing file.", e);
@@ -103,6 +137,8 @@ public class FXImageCompare {
     }
 
     public void compare() {
+        imgc = null;
+        pixelLocations.clear();
         StringBuilder sb = new StringBuilder();
         logger.info("Starting compare...");
         width = (int) img1.getWidth();
@@ -131,6 +167,7 @@ public class FXImageCompare {
                     // draw an indicator on the change image to show where change was detected.
                     //gc.drawRect(x*blocksx, y*blocksy, blocksx - 1, blocksy - 1);
                     this.match = false;
+                    pixelLocations.add(new PixelLocation(x, y));
                     //return;
                 }
                 if (debugMode == 1) sb.append((diff > factorA ? "X" : " "));
@@ -138,6 +175,10 @@ public class FXImageCompare {
 
             }
             if (debugMode > 0) sb.append("|\n");
+        }
+        if(!match && AppOptions.getInstance().isNoWriteDifferences()) {
+            EventBus eventBus = EventBusSingleton.getInstance().getEventBus();
+            eventBus.post(new ImageChangeEvent(img2, pixelLocations, comparex, comparey));
         }
         logger.info("Image:\n{}", sb);
         logger.info("Finished compare.");
