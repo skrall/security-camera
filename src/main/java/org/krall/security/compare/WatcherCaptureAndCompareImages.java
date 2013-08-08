@@ -22,10 +22,11 @@ public class WatcherCaptureAndCompareImages implements CaptureAndCompareImages {
 
     private FXImageCompare imageCompare = new FXImageCompare();
 
-    private ThreadPoolExecutor executor = new ThreadPoolExecutor(1, 1, 0, TimeUnit.SECONDS,
-                                                                 new ArrayBlockingQueue<Runnable>(1));
+    private ThreadPoolExecutor executor;
 
     public WatcherCaptureAndCompareImages() {
+        executor = new ThreadPoolExecutor(1, 1, 0, TimeUnit.SECONDS,
+                                          new ArrayBlockingQueue<Runnable>(1));
         AppOptions options = AppOptions.getInstance();
         imageCompare
                 .setParameters(options.getVerticalRegions(), options.getHorizontalRegions(), options.getSensitivity(),
@@ -73,16 +74,12 @@ public class WatcherCaptureAndCompareImages implements CaptureAndCompareImages {
         @Override
         protected Void call() throws Exception {
             try {
-                logger.info("Beginning work in thread...");
-                Thread.sleep(200);  // Let the image finish writing....
+                logger.info("Beginning work in thread");
                 Image image = new Image(Files.newInputStream(imageFile));
                 imageCompare.setImg2(image);
                 if (imageCompare.getImg1() != null) {
                     imageCompare.compare();
                     logger.info("Detected a difference: {}", !imageCompare.match());
-                    //if(!imageCompare.match()) {
-                    //    imageCompare.writeImg2ToFile(String.format("%05d.png", numberOfDifferences++));
-                    //}
                 }
                 imageCompare.setImg1(image);
                 Files.delete(imageFile);

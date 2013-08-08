@@ -40,7 +40,11 @@ public class AppOptions {
     boolean useTimeLapse = false;
 
     @Option(name = "--noWriteDifferences", aliases = {"-n"}, usage = "Don't write differences to disk")
-    boolean noWriteDifferences = true;
+    boolean noWriteDifferences = false;
+
+    @Option(name = "--noDrawDifferenceMarks", aliases = {"-a"}, usage = "Don't modify the images, " +
+                                                                        "marking what area on the image changed")
+    boolean noDrawDifferenceMarks = false;
 
     @Option(name = "--millisBetweenCapture", aliases = {"-m"}, usage = "Milliseconds between captures when in time " +
                                                                        "lapse mode.")
@@ -100,6 +104,10 @@ public class AppOptions {
 
     public boolean isNoWriteDifferences() {
         return noWriteDifferences;
+    }
+
+    public boolean isNoDrawDifferenceMarks() {
+        return noDrawDifferenceMarks;
     }
 
     public int getMillisBetweenCapture() {

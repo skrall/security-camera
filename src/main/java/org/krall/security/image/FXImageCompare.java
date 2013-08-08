@@ -1,22 +1,16 @@
 package org.krall.security.image;
 
 import com.google.common.eventbus.EventBus;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelFormat;
 import javafx.scene.image.PixelReader;
-import javafx.scene.image.WritableImage;
 import javafx.scene.image.WritablePixelFormat;
-import javafx.scene.paint.Color;
 import org.krall.security.commandline.AppOptions;
 import org.krall.security.event.EventBusSingleton;
 import org.krall.security.event.ImageChangeEvent;
-import org.krall.security.util.SwingFXUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.FileInputStream;
 import java.nio.IntBuffer;
@@ -30,8 +24,6 @@ public class FXImageCompare {
     private Image img1 = null;
 
     private Image img2 = null;
-
-    private Image imgc = null;
 
     protected int comparex = 0;
 
@@ -93,51 +85,12 @@ public class FXImageCompare {
         return img2;
     }
 
-    // return the image that indicates the regions where changes where detected.
-    public Image getChangeIndicator() {
-        try {
-            Canvas canvas = new Canvas(imgc.getWidth(), imgc.getHeight());
-
-            GraphicsContext gc = canvas.getGraphicsContext2D();
-            gc.drawImage(imgc, 0, 0);
-
-            int width = (int) imgc.getWidth();
-            int heigth = (int) imgc.getHeight();
-            int blocksx = width / comparex;
-            int blocksy = heigth / comparey;
-
-            int x = 7;
-            int y = 5;
-            gc.setStroke(Color.RED);
-            gc.strokeRect(x * blocksx, y * blocksy, blocksx, blocksy);
-
-            WritableImage wim = new WritableImage(width, heigth);
-            canvas.snapshot(null, wim);
-
-            return imgc;
-        } catch (Exception e) {
-            logger.error("Error while creating change indicator image.", e);
-            throw new RuntimeException("Error while creating change indicator image.", e);
-        }
-    }
-
-    public void writeImg2ToFile(String filename) {
-        try {
-            File outputFile = new File(AppOptions.getInstance().getOutputDirectory(), filename);
-            ImageIO.write(SwingFXUtils.fromFXImage(img2, null), "png", outputFile);
-        } catch (Exception e) {
-            logger.error("Error while writing file.", e);
-            throw new RuntimeException("Error while writing file.", e);
-        }
-    }
-
     // returns true if image pair is considered a match
     public boolean match() {
         return this.match;
     }
 
     public void compare() {
-        imgc = null;
         pixelLocations.clear();
         StringBuilder sb = new StringBuilder();
         logger.info("Starting compare...");
@@ -176,7 +129,7 @@ public class FXImageCompare {
             }
             if (debugMode > 0) sb.append("|\n");
         }
-        if(!match && AppOptions.getInstance().isNoWriteDifferences()) {
+        if(!match && !AppOptions.getInstance().isNoWriteDifferences()) {
             EventBus eventBus = EventBusSingleton.getInstance().getEventBus();
             eventBus.post(new ImageChangeEvent(img2, pixelLocations, comparex, comparey));
         }
@@ -217,30 +170,6 @@ public class FXImageCompare {
             total += pixelValues;
         }
         return (total / ((width / factorD) * (heigth / factorD)));
-    }
-
-    /* create a runable demo thing. */
-    public static void main(String[] args) {
-        long start = System.currentTimeMillis();
-
-        // Create a compare object specifying the 2 images for comparison.
-        FXImageCompare ic = new FXImageCompare("src/test/resources/sample/person/a0001.jpg",
-                                               "src/test/resources/sample/person/a0002.jpg");
-        // Set the comparison parameters.
-        //   (num vertical regions, num horizontal regions, sensitivity, stabilizer)
-        ic.setParameters(8, 6, 5, 10);
-        // Display some indication of the differences in the image.
-        ic.setDebugMode(2);
-        // Compare.
-        ic.compare();
-        // Display if these images are considered a match according to our parameters.
-        System.out.println("Match: " + ic.match());
-        // If its not a match then write a file to show changed regions.
-        if (!ic.match()) {
-            //saveJPG(ic.getChangeIndicator(), "changes.jpg");
-        }
-
-        logger.info("Total time in ms: " + (System.currentTimeMillis() - start));
     }
 
 }

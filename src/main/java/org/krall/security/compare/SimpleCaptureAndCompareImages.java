@@ -13,7 +13,6 @@ public class SimpleCaptureAndCompareImages implements CaptureAndCompareImages {
 
     @Override
     public void captureAndCompareImages() {
-        int numberOfDifferences = 0;
         Image oldImage = null;
         Image newImage;
         CaptureThumbnailImage captureThumbnailImage = new CaptureThumbnailImage();
@@ -22,16 +21,13 @@ public class SimpleCaptureAndCompareImages implements CaptureAndCompareImages {
         AppOptions options = AppOptions.getInstance();
         imageCompare.setParameters(options.getVerticalRegions(), options.getHorizontalRegions(),
                                    options.getSensitivity(), options.getStabilizer());
-        for(;;) {
+        while(true) {
             captureThumbnailImage.run();
             newImage = captureThumbnailImage.getImage();
             imageCompare.setImg2(newImage);
             if(oldImage != null) {
                 imageCompare.compare();
                 logger.info("Detected a difference: {}", !imageCompare.match());
-                //if(!imageCompare.match()) {
-                //    imageCompare.writeImg2ToFile(String.format("%05d.png", numberOfDifferences++));
-                //}
             }
             oldImage = newImage;
             imageCompare.setImg1(oldImage);
