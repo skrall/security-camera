@@ -131,7 +131,7 @@ public class FXImageCompare {
         }
         if(!match && !AppOptions.getInstance().isNoWriteDifferences()) {
             EventBus eventBus = EventBusSingleton.getInstance().getEventBus();
-            eventBus.post(new ImageChangeEvent(img2, pixelLocations, comparex, comparey));
+            eventBus.post(new ImageChangeEvent(img2, pixelLocations));
         }
         logger.info("Image:\n{}", sb);
         logger.info("Finished compare.");

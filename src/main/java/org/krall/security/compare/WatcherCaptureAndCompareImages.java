@@ -9,6 +9,7 @@ import org.krall.security.image.FXImageCompare;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -73,18 +74,22 @@ public class WatcherCaptureAndCompareImages implements CaptureAndCompareImages {
 
         @Override
         protected Void call() throws Exception {
+            InputStream is = null;
             try {
                 logger.info("Beginning work in thread");
-                Image image = new Image(Files.newInputStream(imageFile));
+                is = Files.newInputStream(imageFile);
+                Image image = new Image(is);
                 imageCompare.setImg2(image);
                 if (imageCompare.getImg1() != null) {
                     imageCompare.compare();
                     logger.info("Detected a difference: {}", !imageCompare.match());
                 }
                 imageCompare.setImg1(image);
-                Files.delete(imageFile);
             } catch (Exception e) {
                 logger.error("Error while processing image.", e);
+            } finally {
+                if(is != null) try { is.close(); } catch(Exception ignore) {}
+                Files.delete(imageFile);
             }
             return null;
         }

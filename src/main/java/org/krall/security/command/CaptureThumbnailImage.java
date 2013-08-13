@@ -26,9 +26,10 @@ public class CaptureThumbnailImage implements Runnable {
         outputStream = new ByteArrayOutputStream();
         executor.setStreamHandler(new PumpStreamHandler(outputStream, null));
         executor.setProcessDestroyer(new ShutdownHookProcessDestroyer());
-        command = CommandLine.parse(String.format("raspistill -n -t 0 -w %d -h %d -o - ",
+        command = CommandLine.parse(String.format("raspistill -n -t 0 -w %d -h %d -o - %s",
                                                   AppOptions.getInstance().getImageWidth(),
-                                                  AppOptions.getInstance().getImageHeight()));
+                                                  AppOptions.getInstance().getImageHeight(),
+                                                  AppOptions.getInstance().getRaspistillOptions()));
     }
 
     @Override

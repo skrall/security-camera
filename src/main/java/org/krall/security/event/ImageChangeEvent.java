@@ -10,14 +10,10 @@ public class ImageChangeEvent {
 
     private Image image;
     private List<PixelLocation> pixelLocations = new ArrayList<>();
-    private int comparex;
-    private int comparey;
 
-    public ImageChangeEvent(Image image, List<PixelLocation> pixelLocations, int comparex, int comparey) {
+    public ImageChangeEvent(Image image, List<PixelLocation> pixelLocations) {
         this.image = image;
         this.pixelLocations = pixelLocations;
-        this.comparex = comparex;
-        this.comparey = comparey;
     }
 
     public Image getImage() {
@@ -28,11 +24,4 @@ public class ImageChangeEvent {
         return pixelLocations;
     }
 
-    public int getComparex() {
-        return comparex;
-    }
-
-    public int getComparey() {
-        return comparey;
-    }
 }

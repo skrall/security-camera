@@ -50,6 +50,9 @@ public class AppOptions {
                                                                        "lapse mode.")
     int millisBetweenCapture = 1000;
 
+    @Option(name = "--raspistillOptions", aliases = {"-p"}, usage = "Options to pass directly to raspistill.")
+    private String raspistillOptions = "";
+
 
     static {
         appOptions = new AppOptions();
@@ -112,5 +115,9 @@ public class AppOptions {
 
     public int getMillisBetweenCapture() {
         return millisBetweenCapture;
+    }
+
+    public String getRaspistillOptions() {
+        return raspistillOptions;
     }
 }

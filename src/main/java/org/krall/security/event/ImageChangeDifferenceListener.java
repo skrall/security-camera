@@ -32,10 +32,12 @@ public class ImageChangeDifferenceListener {
                 Graphics2D gc = bufferedImage.createGraphics();
                 gc.setColor(java.awt.Color.RED);
 
+                AppOptions options = AppOptions.getInstance();
+
                 int width = (int) image.getWidth();
                 int heigth = (int) image.getHeight();
-                int blocksx = width / changeEvent.getComparex();
-                int blocksy = heigth / changeEvent.getComparey();
+                int blocksx = width / options.getVerticalRegions();
+                int blocksy = heigth / options.getHorizontalRegions();
 
                 for (PixelLocation pixelLocation : changeEvent.getPixelLocations()) {
                     gc.drawRect(pixelLocation.getX() * blocksx, pixelLocation.getY() * blocksy, blocksx, blocksy);
