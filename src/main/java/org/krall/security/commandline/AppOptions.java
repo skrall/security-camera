@@ -49,6 +49,11 @@ public class AppOptions {
     @Option(name = "--startJetty", aliases = {"-j"}, usage = "Start jetty web server, to serve image differences.")
     boolean startJetty = false;
 
+
+    @Option(name = "--disableFreeSpaceChecker", aliases = {"-d"}, usage = "Disable background thread that checks for " +
+                                                                          "free space.")
+    boolean disableFreeSpaceChecker = false;
+
     @Option(name = "--millisBetweenCapture", aliases = {"-m"}, usage = "Milliseconds between captures when in time " +
                                                                        "lapse mode.")
     int millisBetweenCapture = 1000;
@@ -125,6 +130,10 @@ public class AppOptions {
 
     public boolean isStartJetty() {
         return startJetty;
+    }
+
+    public boolean isDisableFreeSpaceChecker() {
+        return disableFreeSpaceChecker;
     }
 
     public int getMillisBetweenCapture() {
