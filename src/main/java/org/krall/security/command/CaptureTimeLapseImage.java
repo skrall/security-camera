@@ -21,7 +21,7 @@ public class CaptureTimeLapseImage implements Runnable{
     public CaptureTimeLapseImage() {
         executor.setProcessDestroyer(new ShutdownHookProcessDestroyer());
         AppOptions options = AppOptions.getInstance();
-        command = CommandLine.parse(String.format("raspistill -o %s/%%08d.jpg -t 3600000 -tl %s -n " +
+        command = CommandLine.parse(String.format("raspistill -o %s/%%08d.jpg -t 3600000 -tl %s " +
                                                   "-w %s -h %s %s",
                                                   options.getInputDirectory().getAbsolutePath(),
                                                   options.getMillisBetweenCapture(),

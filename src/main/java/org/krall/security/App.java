@@ -14,6 +14,7 @@ import org.krall.security.event.EventBusSingleton;
 import org.krall.security.event.ImageChangeDifferenceListener;
 import org.krall.security.image.FXImageCompare;
 import org.krall.security.image.ImageCompare;
+import org.krall.security.jetty.EmbeddedJettyServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,6 +36,11 @@ public class App extends Application {
 
         EventBus eventBus = EventBusSingleton.getInstance().getEventBus();
         eventBus.register(new ImageChangeDifferenceListener());
+
+        if(AppOptions.getInstance().isStartJetty()) {
+            EmbeddedJettyServer jetty = new EmbeddedJettyServer();
+            jetty.startEmbeddedServer();
+        }
 
         captureAndCompareImages.captureAndCompareImages();
     }

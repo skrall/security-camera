@@ -46,9 +46,19 @@ public class AppOptions {
                                                                         "marking what area on the image changed")
     boolean noDrawDifferenceMarks = false;
 
+    @Option(name = "--startJetty", aliases = {"-j"}, usage = "Start jetty web server, to serve image differences.")
+    boolean startJetty = false;
+
     @Option(name = "--millisBetweenCapture", aliases = {"-m"}, usage = "Milliseconds between captures when in time " +
                                                                        "lapse mode.")
     int millisBetweenCapture = 1000;
+
+    @Option(name = "--maxPercentFree", usage = "Maximum percent used before a purge happens.")
+    int maxPercentFree = 80;
+
+
+    @Option(name = "--keepPercentFree", usage = "Maximum percent used before a purge happens.")
+    int keepPercentFree = 50;
 
     @Option(name = "--raspistillOptions", aliases = {"-p"}, usage = "Options to pass directly to raspistill.")
     private String raspistillOptions = "";
@@ -113,8 +123,20 @@ public class AppOptions {
         return noDrawDifferenceMarks;
     }
 
+    public boolean isStartJetty() {
+        return startJetty;
+    }
+
     public int getMillisBetweenCapture() {
         return millisBetweenCapture;
+    }
+
+    public int getMaxPercentFree() {
+        return maxPercentFree;
+    }
+
+    public int getKeepPercentFree() {
+        return keepPercentFree;
     }
 
     public String getRaspistillOptions() {
