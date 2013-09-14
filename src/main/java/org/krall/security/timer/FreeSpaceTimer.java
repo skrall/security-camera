@@ -29,14 +29,18 @@ public class FreeSpaceTimer extends TimerTask {
             double totalSpace = fileStore.getTotalSpace();
             double percentFree = bytesFree / totalSpace * 100;
             double percentUsed = 100 - percentFree;
+            logger.info("BytesFree: {} TotalSpace: {} PercentFree: {} PercentUsed: {}", bytesFree, totalSpace,
+                        percentFree, percentUsed);
 
             if (percentUsed > AppOptions.getInstance().getMaxPercentFree()) {
-                double bytesNeedToRemove = totalSpace * AppOptions.getInstance().getKeepPercentFree();
+                double bytesNeedToRemove = totalSpace * (AppOptions.getInstance().getKeepPercentFree() / 100.0);
+                logger.info("BytesNeedToRemove: {}", bytesNeedToRemove);
                 List<Path> files = sortDirectoryByLastModified(outputDirectory);
                 int x = 0;
                 while (bytesNeedToRemove > 0) {
                     Path p = files.get(x++);
-                    bytesNeedToRemove = -Files.size(p);
+                    bytesNeedToRemove = bytesNeedToRemove - Files.size(p);
+                    logger.info("BytesNeedToRemove in loop: {}", bytesNeedToRemove);
                     Files.delete(p);
                 }
             }
