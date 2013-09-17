@@ -25,7 +25,7 @@ public class INotifyWait implements Runnable {
         executor.setProcessDestroyer(new ShutdownHookProcessDestroyer());
         executor.setStreamHandler(new PumpStreamHandler(new CustomLogOutputStream()));
         AppOptions options = AppOptions.getInstance();
-        command = CommandLine.parse(String.format("inotifywait -m -e close_write --format %%w%%f -q %s ",
+        command = CommandLine.parse(String.format("inotifywait -m -e moved_to --format %%w%%f -q %s ",
                                                   options.getInputDirectory().getAbsolutePath()));
     }
 
