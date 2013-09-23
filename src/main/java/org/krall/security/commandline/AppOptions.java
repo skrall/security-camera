@@ -5,65 +5,66 @@ import org.kohsuke.args4j.Option;
 
 import java.io.File;
 
+@SuppressWarnings("FieldCanBeLocal")
 public class AppOptions {
 
     private static AppOptions appOptions;
 
     @Option(name = "--width", aliases = {"-w"}, depends = "--height", usage = "Width of the image captured")
-    int imageWidth = 800;
+    private int imageWidth = 800;
 
     @Option(name = "--height", aliases = {"-h"}, depends = "--width", usage = "Height of the image captured")
-    int imageHeight = 600;
+    private int imageHeight = 600;
 
     @Option(name = "--inputDirectory", aliases = {"-i"}, usage = "Directory to read for image input.")
-    File inputDirectory = new File("/home/pi/images/input");
+    private File inputDirectory = new File("/home/pi/images/input");
 
     @Option(name = "--outputDirectory", aliases = {"-o"}, usage = "Directory to read for image input.")
-    File outputDirectory = new File("/home/pi/images/output");
+    private File outputDirectory = new File("/home/pi/images/output");
 
     @Option(name = "--verticalRegions", aliases = {"-vr"}, usage = "Number of vertical Regions")
-    int verticalRegions = 8;
+    private int verticalRegions = 8;
 
     @Option(name = "--horizontalRegions", aliases = {"-hr"}, usage = "Number of horizontal Regions")
-    int horizontalRegions = 6;
+    private int horizontalRegions = 6;
 
     @Option(name = "--sensitivity", aliases = {"-s"}, usage = "Sensitivity level for motion detection")
-    int sensitivity = 5;
+    private int sensitivity = 5;
 
     @Option(name = "--stabilizer", aliases = {"-st"}, usage = "Stabilizer level for motion detection")
-    int stabilizer = 10;
+    private int stabilizer = 10;
 
     @Option(name = "--loglevel", aliases = {"-l"}, usage = "Log level", handler = LogLevelHandler.class)
-    Level logLevel = Level.INFO;
+    private Level logLevel = Level.INFO;
 
     @Option(name = "--useTimeLapse", aliases = {"-t"}, usage = "Use time lapse feature of raspistill")
-    boolean useTimeLapse = false;
+    private boolean useTimeLapse = false;
 
     @Option(name = "--noWriteDifferences", aliases = {"-n"}, usage = "Don't write differences to disk")
-    boolean noWriteDifferences = false;
+    private boolean noWriteDifferences = false;
 
     @Option(name = "--noDrawDifferenceMarks", aliases = {"-a"}, usage = "Don't modify the images, " +
                                                                         "marking what area on the image changed")
-    boolean noDrawDifferenceMarks = false;
+    private boolean noDrawDifferenceMarks = false;
 
     @Option(name = "--startJetty", aliases = {"-j"}, usage = "Start jetty web server, to serve image differences.")
-    boolean startJetty = false;
+    private boolean startJetty = false;
 
 
     @Option(name = "--disableFreeSpaceChecker", aliases = {"-d"}, usage = "Disable background thread that checks for " +
                                                                           "free space.")
-    boolean disableFreeSpaceChecker = false;
+    private boolean disableFreeSpaceChecker = false;
 
     @Option(name = "--millisBetweenCapture", aliases = {"-m"}, usage = "Milliseconds between captures when in time " +
                                                                        "lapse mode.")
-    int millisBetweenCapture = 1000;
+    private int millisBetweenCapture = 1000;
 
     @Option(name = "--maxPercentFree", usage = "Maximum percent used before a purge happens.")
-    int maxPercentFree = 80;
+    private int maxPercentFree = 80;
 
 
     @Option(name = "--keepPercentFree", usage = "Maximum percent used before a purge happens.")
-    int keepPercentFree = 50;
+    private int keepPercentFree = 50;
 
     @Option(name = "--raspistillOptions", aliases = {"-p"}, usage = "Options to pass directly to raspistill.")
     private String raspistillOptions = "";
