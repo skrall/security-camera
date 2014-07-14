@@ -10,8 +10,8 @@ import org.krall.security.compare.SimpleCaptureAndCompareImages;
 import org.krall.security.compare.WatcherCaptureAndCompareImages;
 import org.krall.security.event.EventBusSingleton;
 import org.krall.security.event.ImageChangeDifferenceListener;
-import org.krall.security.jetty.EmbeddedJettyServer;
 import org.krall.security.timer.FreeSpaceTimer;
+import org.krall.security.webbit.EmbeddedWebbitServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,9 +37,9 @@ public class App extends Application {
         EventBus eventBus = EventBusSingleton.getInstance().getEventBus();
         eventBus.register(new ImageChangeDifferenceListener());
 
-        if (AppOptions.getInstance().isStartJetty()) {
-            EmbeddedJettyServer jetty = new EmbeddedJettyServer();
-            jetty.startEmbeddedServer();
+        if (AppOptions.getInstance().isStartEmbeddedWebServer()) {
+            EmbeddedWebbitServer webbit = new EmbeddedWebbitServer();
+            webbit.startEmbeddedServer();
         }
 
         if (!AppOptions.getInstance().isDisableFreeSpaceChecker()) {

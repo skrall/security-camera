@@ -47,8 +47,8 @@ public class AppOptions {
                                                                         "marking what area on the image changed")
     private boolean noDrawDifferenceMarks = false;
 
-    @Option(name = "--startJetty", aliases = {"-j"}, usage = "Start jetty web server, to serve image differences.")
-    private boolean startJetty = false;
+    @Option(name = "--startEmbeddedWebServer", aliases = {"-e"}, usage = "Start embedded web server, to serve image differences.")
+    private boolean startEmbeddedWebServer = false;
 
 
     @Option(name = "--disableFreeSpaceChecker", aliases = {"-d"}, usage = "Disable background thread that checks for " +
@@ -129,8 +129,8 @@ public class AppOptions {
         return noDrawDifferenceMarks;
     }
 
-    public boolean isStartJetty() {
-        return startJetty;
+    public boolean isStartEmbeddedWebServer() {
+        return startEmbeddedWebServer;
     }
 
     public boolean isDisableFreeSpaceChecker() {

@@ -20,6 +20,7 @@
         <guava.version>14.0.1</guava.version>
         <jetty.version>9.0.4.v20130625</jetty.version>
         <junit.version>4.11</junit.version>
+        <webbit.version>0.4.15</webbit.version>
     </properties>
 
     <build>
@@ -85,14 +86,9 @@
             <version>${guava.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-server</artifactId>
-            <version>${jetty.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-servlet</artifactId>
-            <version>${jetty.version}</version>
+            <groupId>org.webbitserver</groupId>
+            <artifactId>webbit</artifactId>
+            <version>${webbit.version}</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
